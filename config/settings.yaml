@@ -1,0 +1,4 @@
+base_url: "https://example.com"
+headless: false
+browser: "chromium"
+slow_mo: 100
