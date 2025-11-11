@@ -10,14 +10,14 @@ class LocustGenerator:
 
     def generate(self, output_file='reports/generated_scripts/load_test.py'):
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
-        print(f"\n🧪 Generating Locust script: {output_file}")
+        print(f"\n Generating Locust script: {output_file}")
 
         unique_reqs = self._deduplicate_requests()
         script = self._build_header() + self._build_class(unique_reqs)
 
         with open(output_file, 'w') as f:
             f.write(script)
-        print(f"✅ Locust script generated successfully at {output_file}")
+        print(f" Locust script generated successfully at {output_file}")
 
     def _deduplicate_requests(self):
         seen = set()

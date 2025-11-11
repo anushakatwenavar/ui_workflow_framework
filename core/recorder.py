@@ -19,20 +19,20 @@ class WorkflowRecorder:
         context.on('response', logger.log_response)
 
         login_page = login_url or f"{self.base_url}/login"
-        print(f"🌐 Navigating to {login_page}")
+        print(f" Navigating to {login_page}")
         page.goto(login_page, wait_until='networkidle')
 
-        # 🧠 Wait a bit for dynamic UI to render (Vue/React delay)
+        #  Wait a bit for dynamic UI to render (Vue/React delay)
         page.wait_for_timeout(2500)
 
         # Wait for any input to appear to ensure DOM is ready
         try:
             page.wait_for_selector("input", timeout=5000)
         except:
-            print("⚠️ Inputs did not appear in time. Proceeding anyway...")
+            print(" Inputs did not appear in time. Proceeding anyway...")
 
         # --- auto login
-        print("🔎 Detecting login fields...")
+        print(" Detecting login fields...")
         if not username_selector:
             username_selector = self._find_element(
                 page,
@@ -66,9 +66,9 @@ class WorkflowRecorder:
                 ]
             )
 
-        # 🧩 Fill and submit
+        #  Fill and submit
         if username_selector and password_selector:
-            print("🔐 Logging in automatically...")
+            print(" Logging in automatically...")
             try:
                 page.fill(username_selector, self.username)
                 page.fill(password_selector, self.password)
@@ -80,30 +80,30 @@ class WorkflowRecorder:
                 page.keyboard.type(self.password)
 
             if submit_selector:
-                print(f"🚀 Submitting login form via {submit_selector}")
+                print(f" Submitting login form via {submit_selector}")
                 page.click(submit_selector)
                 page.wait_for_load_state('networkidle', timeout=15000)
-                print("✅ Login successful!")
+                print(" Login successful!")
             else:
-                print("⚠️ Submit button not found. Please press Enter manually in browser.")
+                print(" Submit button not found. Please press Enter manually in browser.")
         else:
-            print("⚠️ Could not detect login fields. Log in manually.")
+            print(" Could not detect login fields. Log in manually.")
             input("Press Enter when logged in...")
 
-        # 🍪 Save cookies
+        #  Save cookies
         self.cookies = context.cookies()
-        print(f"🍪 Saved {len(self.cookies)} cookies")
+        print(f" Saved {len(self.cookies)} cookies")
 
-        print("\n✅ Now perform your user actions. Close browser when done.")
+        print("\n Now perform your user actions. Close browser when done.")
         try:
             page.wait_for_event('close', timeout=0)
         except KeyboardInterrupt:
-            print("\n🛑 Recording interrupted manually. Closing browser...")
+            print("\n Recording interrupted manually. Closing browser...")
         finally:
             browser.close()
             p.stop()
 
-        print(f"\n🎯 Captured {len(logger.recorded_requests)} requests")
+        print(f"\n Captured {len(logger.recorded_requests)} requests")
         return logger.recorded_requests, self.cookies, logger.auth_token
 
     def _find_element(self, page, selectors):
